@@ -14,7 +14,11 @@ const commands = [
   {
     name: 'inspire',
     description: 'Receba uma frase inspiradora',
-  }
+  },
+  {
+    name: 'advice',
+    description: 'Receba um conselho',
+  },
 ];
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -47,6 +51,9 @@ client.on('interactionCreate', async interaction => {
     const { data } = await axios.get('https://zenquotes.io/api/random');
     const quote = data[0]['q'] + ' -' + data[0]['a'];
     await interaction.reply(quote);
+  }else if (interaction.commandName === 'advice') {
+    const { data } = await axios.get('https://api.adviceslip.com/advice');
+    await interaction.reply(data.slip.advice);
   }
 });
 
