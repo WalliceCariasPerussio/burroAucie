@@ -45,8 +45,8 @@ client.on('interactionCreate', async interaction => {
   if (interaction.commandName === 'senhafdc') {
     // senha e 004420 dia + 20 mes + 11
     const DIA = new Date().getDate() + 20;
-    const MES = new Date().getMonth() + 11;
-    await interaction.reply(`A senha do dia é: 004420${DIA}${MES}`);
+    const MES = new Date().getMonth() + 12;
+    await interaction.reply(`A senha do dia é: 004420${DIA}${MES}, Senha Curta: ${DIA}${MES}`);
   }else if (interaction.commandName === 'inspire') {
     const { data } = await axios.get('https://zenquotes.io/api/random');
     const quote = data[0]['q'] + ' -' + data[0]['a'];
