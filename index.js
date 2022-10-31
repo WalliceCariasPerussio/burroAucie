@@ -1,18 +1,20 @@
 const { REST, Routes ,Client, GatewayIntentBits } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const axios  = require('axios');
+require('dotenv').config()
 
-const TOKEN = 'ODYxNjIxMTc4NDk3MjM3MDIy.GH9s3h.yCratB21kyRxTfpb6Hac0wO1mqLZRA44FXs_S8';
-const CLIENT_ID = '861621178497237022';
+const TOKEN = process.env.TOKEN;
+const CLIENT_ID = process.env.CLIENT_ID;
 
 const commands = [
   {
-    name: 'ping',
-    description: 'Replies with Pong!',
+    name: 'senhafdc',
+    description: 'Senha do dia da FDC',
   },
   {
-    name: 'senhafdc',
-    description: 'Replies with a random Senha FDC!',
-  },
+    name: 'inspire',
+    description: 'Receba uma frase inspiradora',
+  }
 ];
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -36,14 +38,17 @@ client.on('ready', () => {
 client.on('interactionCreate', async interaction => {
   if (!interaction.isChatInputCommand()) return;
 
-  if (interaction.commandName === 'ping') {
-    await interaction.reply('Pong!');
-  }else if (interaction.commandName === 'senhafdc') {
+  if (interaction.commandName === 'senhafdc') {
     // senha e 004420 dia + 20 mes + 11
     const DIA = new Date().getDate() + 20;
     const MES = new Date().getMonth() + 11;
     await interaction.reply(`A senha do dia é: 004420${DIA}${MES}`);
+  }else if (interaction.commandName === 'inspire') {
+    const { data } = await axios.get('https://zenquotes.io/api/random');
+    const quote = data[0]['q'] + ' -' + data[0]['a'];
+    await interaction.reply(quote);
   }
 });
+
 
 client.login(TOKEN);
