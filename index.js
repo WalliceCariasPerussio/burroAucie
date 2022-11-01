@@ -10,18 +10,18 @@ const rest = new REST({ version: '10' }).setToken(TOKEN);
 
 (async () => {
   try {
-    console.log('Started refreshing application (/) commands.');
+    console.log('Iniciado a atualização dos comandos do aplicativo (/).');
 
     await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
 
-    console.log('Successfully reloaded application (/) commands.');
+    console.log('Comandos de aplicativo (/) recarregados com sucesso.');
   } catch (error) {
     console.error(error);
   }
 })();
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`Logado como ${client.user.tag}!`);
 });
 
 client.on('interactionCreate', async interaction => {
@@ -29,7 +29,7 @@ client.on('interactionCreate', async interaction => {
 
   if (commands.map((num) =>  num.name === interaction.commandName)) {
     if (interactions[interaction.commandName] != undefined) {
-      await interaction.reply(interactions[interaction.commandName]());
+      await interaction.reply( await interactions[interaction.commandName]());
     }else{
       await interaction.reply('Interação não existe!');
     }
