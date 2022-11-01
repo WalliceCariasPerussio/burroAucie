@@ -1,26 +1,11 @@
-const { REST, Routes ,Client, GatewayIntentBits } = require('discord.js');
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-const axios  = require('axios');
-require('dotenv').config()
+import { REST, Routes ,Client, GatewayIntentBits } from 'discord.js';
+import { config } from 'dotenv'; config();
+import commands from './commands.js';
+import interactions from './interaction.js';
 
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const TOKEN = process.env.TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
-
-const commands = [
-  {
-    name: 'senhafdc',
-    description: 'Senha do dia da FDC',
-  },
-  {
-    name: 'inspire',
-    description: 'Receba uma frase inspiradora',
-  },
-  {
-    name: 'advice',
-    description: 'Receba um conselho',
-  },
-];
-
 const rest = new REST({ version: '10' }).setToken(TOKEN);
 
 (async () => {
@@ -42,20 +27,16 @@ client.on('ready', () => {
 client.on('interactionCreate', async interaction => {
   if (!interaction.isChatInputCommand()) return;
 
-  if (interaction.commandName === 'senhafdc') {
-    // senha e 004420 dia + 20 mes + 11
-    const DIA = new Date().getDate() + 20;
-    const MES = new Date().getMonth() + 12;
-    await interaction.reply(`A senha do dia é: 004420${DIA}${MES}, Senha Curta: ${DIA}${MES}`);
-  }else if (interaction.commandName === 'inspire') {
-    const { data } = await axios.get('https://zenquotes.io/api/random');
-    const quote = data[0]['q'] + ' -' + data[0]['a'];
-    await interaction.reply(quote);
-  }else if (interaction.commandName === 'advice') {
-    const { data } = await axios.get('https://api.adviceslip.com/advice');
-    await interaction.reply(data.slip.advice);
+  if (commands.map((num) =>  num.name === interaction.commandName)) {
+    if (interactions[interaction.commandName] != undefined) {
+      await interaction.reply(interactions[interaction.commandName]());
+    }else{
+      await interaction.reply('Interação não existe!');
+    }
+  }else{
+    await interaction.reply('Comando não existe!');
   }
-});
 
+});
 
 client.login(TOKEN);
